@@ -10,6 +10,8 @@ flask = "*"
 python-dotenv = "*"
 flask-sqlalchemy = "*"
 pymysql = "*"
+flask-wtf = "*"
+wtforms = "*"
 
 [requires]
 python_version = "3.8"
