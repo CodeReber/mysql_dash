@@ -24,3 +24,6 @@ def index():
 def map():
     return render_template('map.html')
 
+@app.route('/storage')
+def storage():
+    return render_template('storage.html')
