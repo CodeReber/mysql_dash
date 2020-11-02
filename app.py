@@ -11,7 +11,8 @@ conn = "mysql+pymysql://{0}:{1}@{2}/{3}".format(secrets.dbuser, secrets.dbpass, 
 
 app = Flask(__name__)
 app.config['SECRET_KEY']='SuperSecretKey'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:1trtAll46@localhost/ocum_report'
+#app.config['SQLALCHEMY_DATABASE_URI'] = conn
+app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///extsql.db"            
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False 
 
 
