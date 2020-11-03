@@ -52,10 +52,10 @@ def storage():
     return render_template('storage.html', form=form)
 
 @app.route('/api/all/<aggr>')
-def all(aggr):
+def all(aggr, start_date):
     all = db.session.query().with_entities(aggregate.name,aggregatecapacityhistoryyearview.periodEndTime,aggregatecapacityhistoryyearview.UsedSum).join(aggregatecapacityhistoryyearview,aggregate.id==aggregatecapacityhistoryyearview.aggregateid)\
         .filter(aggregatecapacityhistoryyearview.periodEndTime>date(2020,5,1),aggregatecapacityhistoryyearview.periodEndTime<date(2020,8,18))\
-            .order_by(aggregate.name.asc(),aggregatecapacityhistoryyearview.periodEndTime.asc()).all()  
+            .filter(aggregate.name==aggr).order_by(aggregate.name.asc(),aggregatecapacityhistoryyearview.periodEndTime.asc()).all()  
 
     aggrArray = []
 
