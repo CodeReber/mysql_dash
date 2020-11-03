@@ -31,6 +31,10 @@ class aggregatecapacityhistoryyearview(db.Model):
     periodEndTime = db.Column(db.String(255))
     UsedSum = db.Column(db.BigInteger)
 
+class Form(FlaskForm):
+    sitename = SelectField('site_name', choices=[('US08','Des Moine'),('US19','Lancaster')])
+    aggr_name = SelectField('aggregate', choices=[])
+
 
 @app.route('/')
 def index():
@@ -40,9 +44,12 @@ def index():
 def map():
     return render_template('map.html')
 
-@app.route('/storage')
+@app.route('/storage', methods=['GET', 'POST'])
 def storage():
-    return render_template('storage.html')
+    form = Form()
+    form.aggr_name.choices = [(aggregate.name) for aggregate in aggregate.query.filter_by(name='us19san02_n2_ssd3800_aggr1').all()]
+
+    return render_template('storage.html', form=form)
 
 @app.route('/api/all/<aggr>')
 def all(aggr):
