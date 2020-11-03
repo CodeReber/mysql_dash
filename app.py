@@ -33,7 +33,8 @@ class aggregatecapacityhistoryyearview(db.Model):
 
 class Form(FlaskForm):
     sitename = SelectField('site_name', choices=[('US08','Des Moine'),('US19','Lancaster')])
-    aggr_name = SelectField('aggregate', choices=[])
+    daterange = SelectField('site_name', choices=[('today','today'),('last week','last 7 days'),('last month','last 30 days'),('last 3month','last 90 days')])
+    #aggr_name = SelectField('aggregate', choices=[])
 
 
 @app.route('/')
@@ -47,7 +48,7 @@ def map():
 @app.route('/storage', methods=['GET', 'POST'])
 def storage():
     form = Form()
-    form.aggr_name.choices = [(aggregate.name) for aggregate in aggregate.query.filter_by(name='us19san02_n2_ssd3800_aggr1').all()]
+    #form.aggr_name.choices = [(aggregate.name) for aggregate in aggregate.query.filter_by(name='start_date').all()]
 
     return render_template('storage.html', form=form)
 
