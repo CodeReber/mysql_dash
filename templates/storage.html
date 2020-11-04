@@ -12,9 +12,25 @@
     <form methods="POST">
         {{ form.csrf_token }}
         {{ form.sitename }}
-        {{ form.daterange }}
+        {{ form.aggrname }}
         <input type="submit">
     </form>
+    <script>
+        let sitename_select = document.getElementById('sitename');
+        let daterange_select = document.getElementById('daterange');
+
+        sitename_select.onchange = function(){
+            sitename = sitename_select.value;
+            
+            fetch('/api/all' + aggr).then(function(response){
+                responsel.json().then(function(data){
+                    console.table(data);
+                });
+            });
+        }
+
+
+    </script>
   
 </body>
 </html>

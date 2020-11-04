@@ -32,9 +32,8 @@ class aggregatecapacityhistoryyearview(db.Model):
     UsedSum = db.Column(db.BigInteger)
 
 class Form(FlaskForm):
-    sitename = SelectField('site_name', choices=[('US08','Des Moine'),('US19','Lancaster')])
-    daterange = SelectField('site_name', choices=[('today','today'),('last week','last 7 days'),('last month','last 30 days'),('last 3month','last 90 days')])
-    #aggr_name = SelectField('aggregate', choices=[])
+    sitename = SelectField('site_name', choices=[('7154','Des Moine'),('24','Lancaster')])
+    aggrname = SelectField('aggr_name', choices=[])
 
 
 @app.route('/')
@@ -48,15 +47,18 @@ def map():
 @app.route('/storage', methods=['GET', 'POST'])
 def storage():
     form = Form()
-    #form.aggr_name.choices = [(aggregate.name) for aggregate in aggregate.query.filter_by(name='start_date').all()]
+    form.aggrname.choices = [(aggregate.id, aggregate.name) for aggregate.id in aggregate.query.filter_by(id='24').all()]
 
+    # if request.method == 'POST':
+    #     aggrname = aggregate.query.filter_by(id=form.city.data).first()
+    #     return '<h1>SiteName: {}, AggrName: {}</h1>'.format(form.sitename.data, aggrname.name)
     return render_template('storage.html', form=form)
 
 @app.route('/api/all/<aggr>')
-def all(aggr, start_date):
+def all(aggr):
     all = db.session.query().with_entities(aggregate.name,aggregatecapacityhistoryyearview.periodEndTime,aggregatecapacityhistoryyearview.UsedSum).join(aggregatecapacityhistoryyearview,aggregate.id==aggregatecapacityhistoryyearview.aggregateid)\
         .filter(aggregatecapacityhistoryyearview.periodEndTime>date(2020,5,1),aggregatecapacityhistoryyearview.periodEndTime<date(2020,8,18))\
-            .filter(aggregate.name==aggr).order_by(aggregate.name.asc(),aggregatecapacityhistoryyearview.periodEndTime.asc()).all()  
+            .filter(aggregate.id==aggr).order_by(aggregate.name.asc(),aggregatecapacityhistoryyearview.periodEndTime.asc()).all()  
 
     aggrArray = []
 
