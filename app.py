@@ -25,6 +25,8 @@ class aggregate(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     uuid = db.Column(db.String(255))
     name = db.Column(db.String(255))
+    clusterId = db.Column(db.Integer)
+
 
 class aggregatecapacityhistoryyearview(db.Model):
     aggregateid = db.Column(db.Integer, primary_key=True)
@@ -32,7 +34,7 @@ class aggregatecapacityhistoryyearview(db.Model):
     UsedSum = db.Column(db.BigInteger)
 
 class Form(FlaskForm):
-    sitename = SelectField('site_name', choices=[('7154','Des Moine'),('24','Lancaster')])
+    sitename = SelectField('site_name', choices=[('2985','Des Moine'),('1','Lancaster')])
     aggrname = SelectField('aggr_name', choices=[])
 
 
@@ -47,23 +49,26 @@ def map():
 @app.route('/storage', methods=['GET', 'POST'])
 def storage():
     form = Form()
-    form.aggrname.choices = [(aggregate.id, aggregate.name) for aggregate.id in aggregate.query.filter_by(id='24').all()]
+    form.aggrname.choices = [(aggr.clusterId, aggr.name) for aggr in aggregate.query.filter_by(clusterId='1').all()]
+    
+    if request.method == 'POST':
+        aggr = aggregate.query.filter_by(name=form.aggrname.data).first()
+        return '<h1>SiteName: {}, AggrName: {}</h1>'.format(form.sitename.data, aggr.name)
 
-    # if request.method == 'POST':
-    #     aggrname = aggregate.query.filter_by(id=form.city.data).first()
-    #     return '<h1>SiteName: {}, AggrName: {}</h1>'.format(form.sitename.data, aggrname.name)
     return render_template('storage.html', form=form)
 
-@app.route('/api/all/<aggr>')
-def all(aggr):
-    all = db.session.query().with_entities(aggregate.name,aggregatecapacityhistoryyearview.periodEndTime,aggregatecapacityhistoryyearview.UsedSum).join(aggregatecapacityhistoryyearview,aggregate.id==aggregatecapacityhistoryyearview.aggregateid)\
-        .filter(aggregatecapacityhistoryyearview.periodEndTime>date(2020,5,1),aggregatecapacityhistoryyearview.periodEndTime<date(2020,8,18))\
-            .filter(aggregate.id==aggr).order_by(aggregate.name.asc(),aggregatecapacityhistoryyearview.periodEndTime.asc()).all()  
+@app.route('/api/all')
+def all():
+    all = db.session.query().with_entities(aggregate.clusterId,aggregate.name,aggregatecapacityhistoryyearview.periodEndTime,aggregatecapacityhistoryyearview.UsedSum).join(aggregatecapacityhistoryyearview,aggregate.id==aggregatecapacityhistoryyearview.aggregateid)\
+        .order_by(aggregate.clusterId.asc(),aggregate.name.asc(),aggregatecapacityhistoryyearview.periodEndTime.asc()).all() 
+        # .filter(aggregatecapacityhistoryyearview.periodEndTime>date(2020,5,1),aggregatecapacityhistoryyearview.periodEndTime<date(2020,8,18))\
+         
 
     aggrArray = []
 
-    for aggregate.name,aggregatecapacityhistoryyearview.periodEndTime,aggregatecapacityhistoryyearview.UsedSum in all:
+    for aggregate.clusterId,aggregate.name,aggregatecapacityhistoryyearview.periodEndTime,aggregatecapacityhistoryyearview.UsedSum in all:
         aggrObj = {}
+        aggrObj['Cluster_id'] = aggregate.clusterId
         aggrObj['aggr_name'] = aggregate.name
         aggrObj['date'] = aggregatecapacityhistoryyearview.periodEndTime
         aggrObj['Capacity'] = aggregatecapacityhistoryyearview.UsedSum
