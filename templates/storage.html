@@ -9,7 +9,7 @@
 </head>
 <body>
  {% include 'nav.html'%}
-    <form methods="POST">
+    <form method="POST">
         {{ form.csrf_token }}
         {{ form.sitename }}
         {{ form.aggrname }}

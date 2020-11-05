@@ -49,10 +49,10 @@ def map():
 @app.route('/storage', methods=['GET', 'POST'])
 def storage():
     form = Form()
-    form.aggrname.choices = [(aggr.clusterId, aggr.name) for aggr in aggregate.query.filter_by(clusterId='1').all()]
+    form.aggrname.choices = [(aggr.id, aggr.name) for aggr in aggregate.query.filter_by(clusterId='1').all()]
     
     if request.method == 'POST':
-        aggr = aggregate.query.filter_by(name=form.aggrname.data).first()
+        aggr = aggregate.query.filter_by(id=form.aggrname.data).first()
         return '<h1>SiteName: {}, AggrName: {}</h1>'.format(form.sitename.data, aggr.name)
 
     return render_template('storage.html', form=form)
