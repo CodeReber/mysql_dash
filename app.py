@@ -57,15 +57,16 @@ def storage():
 
     return render_template('storage.html', form=form)
 
-@app.route('/api/all/<clid>')
+@app.route('/api/<clid>')
 def all(clid):
-    all = db.session.query().with_entities(aggregate.clusterId,aggregate.name,aggregatecapacityhistoryyearview.periodEndTime,aggregatecapacityhistoryyearview.UsedSum).join(aggregatecapacityhistoryyearview,aggregate.id==aggregatecapacityhistoryyearview.aggregateid)\
+    #sql query in sqlalchemy format for a join
+    results = db.session.query().with_entities(aggregate.clusterId,aggregate.name,aggregatecapacityhistoryyearview.periodEndTime,aggregatecapacityhistoryyearview.UsedSum).join(aggregatecapacityhistoryyearview,aggregate.id==aggregatecapacityhistoryyearview.aggregateid)\
         .filter(aggregate.clusterId==clid).order_by(aggregate.clusterId.asc(),aggregate.name.asc(),aggregatecapacityhistoryyearview.periodEndTime.asc()).all() 
         # .filter(aggregatecapacityhistoryyearview.periodEndTime>date(2020,5,1),aggregatecapacityhistoryyearview.periodEndTime<date(2020,8,18))\
          
     aggrArray = []
 
-    for aggregate.clusterId,aggregate.name,aggregatecapacityhistoryyearview.periodEndTime,aggregatecapacityhistoryyearview.UsedSum in all:
+    for clusterId,name,periodEndTime,UsedSum in results:
         aggrObj = {}
         aggrObj['Cluster_id'] = aggregate.clusterId
         aggrObj['aggr_name'] = aggregate.name

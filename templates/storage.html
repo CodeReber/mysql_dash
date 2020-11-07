@@ -22,7 +22,7 @@
         sitename_select.onchange = function(){
             sitename = sitename_select.value;
             var clid = sitename
-            fetch('/api/all/' + clid).then(function(response){
+            fetch('/api/' + clid).then(function(response){
                 response.json().then(function(data){
                     console.log(data);
                 });
