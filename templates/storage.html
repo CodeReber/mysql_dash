@@ -21,10 +21,10 @@
 
         sitename_select.onchange = function(){
             sitename = sitename_select.value;
-            
-            fetch('/api/all' + aggr).then(function(response){
-                responsel.json().then(function(data){
-                    console.table(data);
+            var clid = sitename
+            fetch('/api/all/' + clid).then(function(response){
+                response.json().then(function(data){
+                    console.log(data);
                 });
             });
         }

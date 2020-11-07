@@ -57,13 +57,12 @@ def storage():
 
     return render_template('storage.html', form=form)
 
-@app.route('/api/all')
-def all():
+@app.route('/api/all/<clid>')
+def all(clid):
     all = db.session.query().with_entities(aggregate.clusterId,aggregate.name,aggregatecapacityhistoryyearview.periodEndTime,aggregatecapacityhistoryyearview.UsedSum).join(aggregatecapacityhistoryyearview,aggregate.id==aggregatecapacityhistoryyearview.aggregateid)\
-        .order_by(aggregate.clusterId.asc(),aggregate.name.asc(),aggregatecapacityhistoryyearview.periodEndTime.asc()).all() 
+        .filter(aggregate.clusterId==clid).order_by(aggregate.clusterId.asc(),aggregate.name.asc(),aggregatecapacityhistoryyearview.periodEndTime.asc()).all() 
         # .filter(aggregatecapacityhistoryyearview.periodEndTime>date(2020,5,1),aggregatecapacityhistoryyearview.periodEndTime<date(2020,8,18))\
          
-
     aggrArray = []
 
     for aggregate.clusterId,aggregate.name,aggregatecapacityhistoryyearview.periodEndTime,aggregatecapacityhistoryyearview.UsedSum in all:
@@ -74,6 +73,7 @@ def all():
         aggrObj['Capacity'] = aggregatecapacityhistoryyearview.UsedSum
         aggrArray.append(aggrObj)
 
-    return jsonify([aggrArray]) 
+    return jsonify([aggrArray])
+    
 
 
