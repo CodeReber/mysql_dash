@@ -68,10 +68,10 @@ def all(clid):
 
     for clusterId,name,periodEndTime,UsedSum in results:
         aggrObj = {}
-        aggrObj['Cluster_id'] = aggregate.clusterId
-        aggrObj['aggr_name'] = aggregate.name
-        aggrObj['date'] = aggregatecapacityhistoryyearview.periodEndTime
-        aggrObj['Capacity'] = aggregatecapacityhistoryyearview.UsedSum
+        aggrObj['Cluster_id'] = clusterId
+        aggrObj['aggr_name'] = name
+        aggrObj['date'] = periodEndTime
+        aggrObj['Capacity'] = UsedSum
         aggrArray.append(aggrObj)
 
     return jsonify([aggrArray])
