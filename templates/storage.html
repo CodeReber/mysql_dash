@@ -24,7 +24,13 @@
             var clid = sitename
             fetch('/api/' + clid).then(function(response){
                 response.json().then(function(data){
-                    console.log(data);
+                    //console.log(data);
+                    let optionHTML = ' ';
+
+                    for (let name of data.aggr_name){
+                        optionHTML += '<option value="' + data.Cluster_id + '">' + data.aggr_name + '</option>';
+                    }
+                    aggrname_select.innerHTML = optionHTML;
                 });
             });
         }
