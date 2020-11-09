@@ -74,7 +74,7 @@ def all(clid):
         aggrObj['Capacity'] = UsedSum
         aggrArray.append(aggrObj)
 
-    return jsonify([aggrArray])
+    return {'results': aggrArray}
     
 
 

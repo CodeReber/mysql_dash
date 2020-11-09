@@ -24,7 +24,7 @@
             var clid = sitename
             fetch('/api/' + clid).then(function(response){
                 response.json().then(function(data){
-                    //console.log(data);
+                    console.log(data);
                     let optionHTML = ' ';
 
                     for (let obj of data){
