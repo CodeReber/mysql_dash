@@ -49,7 +49,7 @@ def map():
 @app.route('/storage', methods=['GET', 'POST'])
 def storage():
     form = Form()
-    form.aggrname.choices = [(aggr.id, aggr.name) for aggr in aggregate.query.filter_by(clusterId='1').all()]
+    form.aggrname.choices = [(aggr.id, aggr.name) for aggr in aggregate.query.filter_by(clusterId='2985').all()]
     
     if request.method == 'POST':
         aggr = aggregate.query.filter_by(id=form.aggrname.data).first()
@@ -60,18 +60,19 @@ def storage():
 @app.route('/api/<clid>')
 def all(clid):
     #sql query in sqlalchemy format for a join
-    results = db.session.query().with_entities(aggregate.clusterId,aggregate.name,aggregatecapacityhistoryyearview.periodEndTime,aggregatecapacityhistoryyearview.UsedSum).join(aggregatecapacityhistoryyearview,aggregate.id==aggregatecapacityhistoryyearview.aggregateid)\
-        .filter(aggregate.clusterId==clid).order_by(aggregate.clusterId.asc(),aggregate.name.asc(),aggregatecapacityhistoryyearview.periodEndTime.asc()).all() 
+    results = db.session.query().with_entities(aggregate.clusterId,aggregate.name).filter(aggregate.clusterId==clid).all()
+    # results = db.session.query().with_entities(aggregate.clusterId,aggregate.name,aggregatecapacityhistoryyearview.periodEndTime,aggregatecapacityhistoryyearview.UsedSum).join(aggregatecapacityhistoryyearview,aggregate.id==aggregatecapacityhistoryyearview.aggregateid)\
+        # .filter(aggregate.clusterId==clid).order_by(aggregate.clusterId.asc(),aggregate.name.asc(),aggregatecapacityhistoryyearview.periodEndTime.asc()).all() 
         # .filter(aggregatecapacityhistoryyearview.periodEndTime>date(2020,5,1),aggregatecapacityhistoryyearview.periodEndTime<date(2020,8,18))\
          
     aggrArray = []
 
-    for clusterId,name,periodEndTime,UsedSum in results:
+    for clusterId, name in results:
         aggrObj = {}
         aggrObj['Cluster_id'] = clusterId
         aggrObj['aggr_name'] = name
-        aggrObj['date'] = periodEndTime
-        aggrObj['Capacity'] = UsedSum
+        # aggrObj['date'] = periodEndTime
+        # aggrObj['Capacity'] = UsedSum
         aggrArray.append(aggrObj)
 
     return {'results': aggrArray}
