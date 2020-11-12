@@ -57,6 +57,25 @@ def storage():
 
     return render_template('storage.html', form=form)
 
+@app.route('/api/chart/<aggr_id>')
+def aggrid(aggr_id):
+    
+    results = db.session.query().with_entities(aggregate.id,aggregate.name,aggregatecapacityhistoryyearview.periodEndTime,aggregatecapacityhistoryyearview.UsedSum).join(aggregatecapacityhistoryyearview,aggregate.id==aggregatecapacityhistoryyearview.aggregateid)\
+        .filter(aggregate.id==aggr_id).order_by(aggregate.clusterId.asc(),aggregate.name.asc(),aggregatecapacityhistoryyearview.periodEndTime.asc()).all() 
+
+    aggrArray = []
+
+    for id, name, periodEndTime, UsedSum in results:
+        aggrObj = {}
+        x = UsedSum/1024/1024/1024/1024
+        aggrObj['Aggr_id'] = id
+        aggrObj['Name'] = name
+        aggrObj['Date'] = periodEndTime
+        aggrObj['Capacity'] = round(x,1)
+        aggrArray.append(aggrObj)
+
+    return {'results': aggrArray}
+
 @app.route('/api/<clid>')
 def all(clid):
     #sql query in sqlalchemy format for a join

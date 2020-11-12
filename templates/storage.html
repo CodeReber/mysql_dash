@@ -6,6 +6,7 @@
     <title>Page Title</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 </head>
 <body>
  {% include 'nav.html'%}
@@ -15,7 +16,9 @@
         {{ form.aggrname }}
         <input type="submit">
     </form>
+    <div id="plot"></div>
     <script>
+        //relates to wtf form class in app.py
         let sitename_select = document.getElementById('sitename');
         let aggrname_select = document.getElementById('aggrname');
 
@@ -26,7 +29,7 @@
                 response.json().then(function(data){
                     // console.log(data);
                     let optionHTML = ' ';
-
+                    //take info from route and inject it into html
                     for (let obj of data.results){
                         console.log(obj.aggr_name);
                         optionHTML += '<option value="' + obj.Cluster_id + '">' + obj.aggr_name + '</option>';
@@ -35,9 +38,13 @@
                 });
             });
         }
+            
 
+         
 
+           
     </script>
+    <script src="../static/test.js"></script>
   
 </body>
 </html>
