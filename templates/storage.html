@@ -14,8 +14,9 @@
         {{ form.csrf_token }}
         {{ form.sitename }}
         {{ form.aggrname }}
-        <input type="submit">
+        <!-- <input type="submit"> -->
     </form>
+    <button type="submit"class="btn">click</button>
     <div id="plot"></div>
     <script>
         //relates to wtf form class in app.py
@@ -31,8 +32,8 @@
                     let optionHTML = ' ';
                     //take info from route and inject it into html
                     for (let obj of data.results){
-                        console.log(obj.aggr_name);
-                        optionHTML += '<option value="' + obj.Cluster_id + '">' + obj.aggr_name + '</option>';
+                        console.log(obj.aggr_id);
+                        optionHTML += '<option value="' + obj.aggr_id + '">' + obj.aggr_name + '</option>';
                     }
                    aggrname_select.innerHTML = optionHTML;
                 });
@@ -44,7 +45,7 @@
 
            
     </script>
-    <script src="../static/test.js"></script>
+    <script src="../static/plot.js"></script>
   
 </body>
 </html>

@@ -79,17 +79,18 @@ def aggrid(aggr_id):
 @app.route('/api/<clid>')
 def all(clid):
     #sql query in sqlalchemy format for a join
-    results = db.session.query().with_entities(aggregate.clusterId,aggregate.name).filter(aggregate.clusterId==clid).all()
+    results = db.session.query().with_entities(aggregate.clusterId,aggregate.name,aggregate.id).filter(aggregate.clusterId==clid).all()
     # results = db.session.query().with_entities(aggregate.clusterId,aggregate.name,aggregatecapacityhistoryyearview.periodEndTime,aggregatecapacityhistoryyearview.UsedSum).join(aggregatecapacityhistoryyearview,aggregate.id==aggregatecapacityhistoryyearview.aggregateid)\
         # .filter(aggregate.clusterId==clid).order_by(aggregate.clusterId.asc(),aggregate.name.asc(),aggregatecapacityhistoryyearview.periodEndTime.asc()).all() 
         # .filter(aggregatecapacityhistoryyearview.periodEndTime>date(2020,5,1),aggregatecapacityhistoryyearview.periodEndTime<date(2020,8,18))\
          
     aggrArray = []
 
-    for clusterId, name in results:
+    for clusterId, name, id in results:
         aggrObj = {}
         aggrObj['Cluster_id'] = clusterId
         aggrObj['aggr_name'] = name
+        aggrObj['aggr_id'] = id
         # aggrObj['date'] = periodEndTime
         # aggrObj['Capacity'] = UsedSum
         aggrArray.append(aggrObj)
