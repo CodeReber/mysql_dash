@@ -4,6 +4,7 @@ const button = document.querySelector('.btn');
 // aggrname_select.onchange = function()
 
   button.addEventListener('click', event =>{
+  event.preventDefault();
   aggrid = aggrname_select.value; 
   console.log(aggrid)
   fetch('/api/chart/' + aggrid).then(function(response){
