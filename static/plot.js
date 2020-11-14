@@ -1,5 +1,5 @@
 let aggrname_select = document.getElementById('aggrname');
-const button = document.querySelector('.btn');
+const button = document.querySelector('#newbtn');
 // console.log(button)
 // aggrname_select.onchange = function()
 
