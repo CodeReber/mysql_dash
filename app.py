@@ -6,7 +6,11 @@ from flask_wtf import FlaskForm
 from wtforms import SelectField
 import pymysql
 import secrets
-from datetime import date
+import requests
+import json
+from pprint import pprint
+#from datetime import date
+import datetime
 
 
 from flask_sqlalchemy import SQLAlchemy
@@ -21,6 +25,14 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
+class api(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    last_name = db.Column(db.String(255))
+    first_name = db.Column(db.String(255))
+    email = db.Column(db.String(255))
+    avatar = db.Column(db.String(255))
+    date = db.Column(db.DateTime)
+ 
 class aggregate(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     uuid = db.Column(db.String(255))
@@ -45,6 +57,33 @@ def index():
 @app.route('/test')
 def test():
     return render_template('test.html')
+
+@app.route('/colab')
+def colab():
+    return render_template('colab.html')
+
+@app.route('/webapi')
+def webapi():
+    payload = {'page': '2'}
+    r = requests.get('https://reqres.in/api/users', params=payload)
+    json_data = r.json()
+    var1 = json_data['data'] 
+    
+    for result in var1:
+        first_name = result['first_name']
+        last_name = result['last_name']
+        email = result['email']
+        avatar = result['avatar']
+        datetime_object = datetime.datetime.now()
+
+        Api = api(first_name=first_name, last_name=last_name, email=email, avatar=avatar, date=datetime_object)
+        db.session.add(Api)
+
+    db.session.commit()
+     
+    return print('it worked')
+
+
 
 @app.route('/storage', methods=['GET', 'POST'])
 def storage():

@@ -12,6 +12,7 @@ flask-sqlalchemy = "*"
 pymysql = "*"
 flask-wtf = "*"
 wtforms = "*"
+requests = "*"
 
 [requires]
 python_version = "3.8"
